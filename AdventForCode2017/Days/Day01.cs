@@ -4,7 +4,7 @@ namespace AdventForCode2017.Days
 {
     public static class Day01
     {
-        private const string FilePath = @"C:\GitHub\AdventOfCode2017\AdventForCode2017\bin\Debug\Input\Day01.txt";
+        private static string FilePath = Directory.GetCurrentDirectory() + @"/Input/Day01.txt";
 
         public static int GetPart1Result()
         {

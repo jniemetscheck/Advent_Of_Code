@@ -60,7 +60,7 @@ namespace AdventForCode2017.Days
         private static List<string[]> GetSegmentedLines()
         {
             var result = new List<string[]>();
-            StreamReader file = new System.IO.StreamReader(@"C:\GitHub\AdventOfCode2017\AdventForCode2017\bin\Debug\Input\Day02.txt");
+            StreamReader file = new System.IO.StreamReader(Directory.GetCurrentDirectory() + @"/Input/Day02.txt");
             string line;
 
             while ((line = file.ReadLine()) != null)

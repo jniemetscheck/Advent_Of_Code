@@ -68,7 +68,7 @@ namespace AdventForCode2017.Days
         private static List<List<string>> GetAllPassphrases()
         {
             var result = new List<List<string>>();
-            StreamReader file = new System.IO.StreamReader(@"C:\GitHub\AdventOfCode2017\AdventForCode2017\bin\Debug\Input\Day04.txt");
+            StreamReader file = new System.IO.StreamReader(Directory.GetCurrentDirectory() + @"/Input/Day04.txt");
             string line;
 
             while ((line = file.ReadLine()) != null)
