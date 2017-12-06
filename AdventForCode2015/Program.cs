@@ -8,9 +8,9 @@ namespace AdventForCode2015
         {
             Console.WriteLine($"Result for Day 01-Part 1: {Days.Day01.GetPart1Result()}");
             Console.WriteLine($"Result for Day 01-Part 2: {Days.Day01.GetPart2Result()}");
-            //Console.WriteLine();
-            //Console.WriteLine($"Result for Day 02-Part 1: {Days.Day02.GetPart1Result()}");
-            //Console.WriteLine($"Result for Day 02-Part 2: {Days.Day02.GetPart2Result()}");
+            Console.WriteLine();
+            Console.WriteLine($"Result for Day 02-Part 1: {Days.Day02.GetPart1Result()}");
+            Console.WriteLine($"Result for Day 02-Part 2: {Days.Day02.GetPart2Result()}");
             //Console.WriteLine();
             //Console.WriteLine($"Result for Day 03-Part 1: {Days.Day03.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 03-Part 2: {Days.Day03.GetPart2Result()}");
