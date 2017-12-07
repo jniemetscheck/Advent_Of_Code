@@ -20,6 +20,9 @@ namespace AdventForCode2017
             Console.WriteLine();
             Console.WriteLine($"Result for Day 05-Part 1: {Days.Day05.GetPart1Result()}");
             Console.WriteLine($"Result for Day 05-Part 2: {Days.Day05.GetPart2Result()}");
+            Console.WriteLine();
+            Console.WriteLine($"Result for Day 05-Part 1: {Days.Day06.GetPart1Result()}");
+            Console.WriteLine($"Result for Day 05-Part 2: {Days.Day06.GetPart2Result()}");
 
             Console.ReadLine();
         }
