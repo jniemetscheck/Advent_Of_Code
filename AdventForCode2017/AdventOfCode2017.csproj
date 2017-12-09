@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B79F975E-5607-4211-BB8B-5EDAE38E309B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>AdventForCode2017</RootNamespace>
-    <AssemblyName>AdventForCode2017</AssemblyName>
+    <RootNamespace>AdventOfCode2017</RootNamespace>
+    <AssemblyName>AdventOfCode2017</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -51,6 +51,7 @@
     <Compile Include="Days\Day04.cs" />
     <Compile Include="Days\Day05.cs" />
     <Compile Include="Days\Day06.cs" />
+    <Compile Include="Days\Day07.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +73,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Input\Day06.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Input\Day07.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Input\TempTest.txt">

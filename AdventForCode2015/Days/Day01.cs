@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace AdventForCode2015.Days
+namespace AdventOfCode2015.Days
 {
     public class Day01
     {

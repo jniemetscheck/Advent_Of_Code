@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventForCode2015
+namespace AdventOfCode2015
 {
     class MainClass
     {

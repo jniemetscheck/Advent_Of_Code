@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AdventForCode2017.Days
+namespace AdventOfCode2017.Days
 {
     public static class Day01
     {
