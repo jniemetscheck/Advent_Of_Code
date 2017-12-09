@@ -27,8 +27,9 @@ namespace AdventOfCode2017
             Console.WriteLine($"Result for Day 07-Part 1: {Days.Day07.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 07-Part 2: {Days.Day07.GetPart2Result()}");
             Console.WriteLine();
-            Console.WriteLine($"Result for Day 08-Part 1: {Days.Day08.GetPart1Result()}");
-            //Console.WriteLine($"Result for Day 08-Part 2: {Days.Day08.GetPart2Result()}");
+            var day08Result = Days.Day08.GetResult();
+            Console.WriteLine($"Result for Day 08-Part 1: {day08Result.Part1}");
+            Console.WriteLine($"Result for Day 08-Part 1: {day08Result.Part2}");
 
             Console.ReadLine();
         }

@@ -11,10 +11,11 @@ namespace AdventOfCode2017.Days
     {
         private static string FilePath = Directory.GetCurrentDirectory() + @"/Input/Day08.txt";
 
-        public static int GetPart1Result()
+        public static (int Part1, int Part2) GetResult()
         {
             var instructions = GetInstructions();
             var known = new Dictionary<string, int>();
+            var max = 0;
 
             foreach (var instruction in instructions)
             {
@@ -70,9 +71,12 @@ namespace AdventOfCode2017.Days
                     default:
                         break;
                 }
+
+                var currentMax = known.OrderByDescending(k => k.Value).FirstOrDefault().Value;
+                max = currentMax > max ? currentMax: max;
             }
 
-            return known.OrderByDescending(k => k.Value).FirstOrDefault().Value;
+            return (known.OrderByDescending(k => k.Value).FirstOrDefault().Value, max);
         }
 
         private static List<Instruction> GetInstructions()
