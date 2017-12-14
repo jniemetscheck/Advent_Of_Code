@@ -10,17 +10,28 @@ namespace AdventOfCode2017.Days
 
         public static int GetPart1Result()
         {
-            return GetResult(GetPrograms());
+            return GetResult(GetPrograms()).ProgramCount;
         }
 
-        public static int GetResult(Dictionary<int, List<int>> programs)
+        public static int GetPart2Result()
+        {
+            return GetResult(GetPrograms()).NonProgramCount;
+        }
+
+        public static (int ProgramCount, int NonProgramCount) GetResult(Dictionary<int, List<int>> programs)
         {
             var programsInGroup = new HashSet<int>();
+            var programsInAnyGroup = new List<HashSet<int>>();
             programsInGroup.Add(0);
 
-            programsInGroup = GetUniqueHashSet(0, programs.FirstOrDefault(x => x.Key == 0).Value, programs, programsInGroup);
+            programsInGroup = GetUniqueHashSet(2, programs.FirstOrDefault(x => x.Key == 0).Value, programs, programsInGroup);
 
-            return programsInGroup.Count;
+            foreach (var program in programs.Where(x => !programsInGroup.Contains(x.Key)))
+            {
+
+            }
+
+            return (programsInGroup.Count, programsInAnyGroup.Count);
         }
 
         public static HashSet<int> GetUniqueHashSet(int parentProgram, List<int> associatedPrograms, Dictionary<int, List<int>> programs, HashSet<int> existingHashset)
