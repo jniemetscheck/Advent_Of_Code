@@ -18,6 +18,6 @@ namespace AdventOfCode2017.Tests
         //{
         //    var input = new List<int> { 7, 4, 8, 9 };
         //    Assert.AreEqual(12, Days.Day10.GetPart1Result(10, input));
-        }
+        //}
     }
 }

@@ -10,9 +10,9 @@ namespace AdventOfCode2017.Days
 
         public static int GetPart1Result()
         {
-            var stream = File.ReadAllText(FilePath);
+            var input = File.ReadAllText(FilePath);
 
-            return GetResult(stream.Select(c => c.ToString()).ToList()).Score;
+            return GetResult(input.Select(c => c.ToString()).ToList()).Score;
         }
 
         public static int GetPart2Result()
