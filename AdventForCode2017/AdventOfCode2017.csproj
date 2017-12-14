@@ -72,6 +72,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Day10Tests.cs" />
     <Compile Include="Tests\Day12Tests.cs" />
+    <Compile Include="Tests\Day13Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
