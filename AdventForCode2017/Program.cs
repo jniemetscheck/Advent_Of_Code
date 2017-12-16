@@ -43,8 +43,14 @@ namespace AdventOfCode2017
             //Console.WriteLine($"Result for Day 12-Part 1: {Days.Day12.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 12-Part 2: {Days.Day12.GetPart2Result()}");
             //Console.WriteLine();
-            Console.WriteLine($"Result for Day 13-Part 1: {Days.Day13.GetPart1Result()}");
+            //Console.WriteLine($"Result for Day 13-Part 1: {Days.Day13.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 13-Part 2: {Days.Day13.GetPart2Result()}");
+            //Console.WriteLine();
+            //Console.WriteLine($"Result for Day 14-Part 1: {Days.Day14.GetPart1Result()}");
+            //Console.WriteLine($"Result for Day 14-Part 2: {Days.Day14.GetPart2Result()}");
+            //Console.WriteLine();
+            //Console.WriteLine($"Result for Day 15-Part 1: {Days.Day15.GetPart1Result()}");
+            Console.WriteLine($"Result for Day 15-Part 2: {Days.Day15.GetPart2Result()}");
 
             Console.ReadLine();
         }

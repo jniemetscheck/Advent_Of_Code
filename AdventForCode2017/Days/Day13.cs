@@ -19,57 +19,72 @@ namespace AdventOfCode2017.Days
             var filledFirewallEntries = GetFilledFirewallEntries(SetInitialState(firewallEntries));
             var currentDepth = 0;
             var caught = new List<FirewallEntry>();
-
-            for (int i = 1; i <= filledFirewallEntries.Count; i++)
-            {
-                foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
-                {
-                    if (scannerAtBeginningEntry.Depth == currentDepth)
-                    {
-                        //we've been caught
-                        caught.Add(scannerAtBeginningEntry);
-                        break;
-                    }
-                }
-                foreach (var entry in filledFirewallEntries)
-                {
-                    if (entry.Range > 0)
-                    {
-                        if (entry.MovingDown)
-                        {
-                            if (entry.ScannerAtRange < entry.Range)
-                            {
-                                entry.ScannerAtRange++;
-                            }
-                            else if (entry.ScannerAtRange == entry.Range)
-                            {
-                                entry.ScannerAtRange--;
-                                entry.MovingDown = false;
-                            }
-                        }
-                        else
-                        {
-                            if (entry.ScannerAtRange > 1)
-                            {
-                                entry.ScannerAtRange--;
-                            }
-                            else if (entry.ScannerAtRange == 1)
-                            {
-                                entry.ScannerAtRange++;
-                                entry.MovingDown = true;
-                            }
-                        }
-                    }
-                }
-                picosecond++;
-                currentDepth++;
-            }
-
+            var delay = 0;
             var severity = 0;
-            foreach (var caughtEntry in caught)
+
+            while (true)
             {
-                severity += caughtEntry.Depth * caughtEntry.Range;
+                severity = 0;
+
+                for (int i = 1; i <= filledFirewallEntries.Count; i++)
+                {
+                    foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
+                    {
+                        if (scannerAtBeginningEntry.Depth == currentDepth)
+                        {
+                            //we've been caught
+                            caught.Add(scannerAtBeginningEntry);
+                            break;
+                        }
+                    }
+                    foreach (var entry in filledFirewallEntries)
+                    {
+                        if (entry.Range > 0)
+                        {
+                            if (entry.MovingDown)
+                            {
+                                if (entry.ScannerAtRange < entry.Range)
+                                {
+                                    entry.ScannerAtRange++;
+                                }
+                                else if (entry.ScannerAtRange == entry.Range)
+                                {
+                                    entry.ScannerAtRange--;
+                                    entry.MovingDown = false;
+                                }
+                            }
+                            else
+                            {
+                                if (entry.ScannerAtRange > 1)
+                                {
+                                    entry.ScannerAtRange--;
+                                }
+                                else if (entry.ScannerAtRange == 1)
+                                {
+                                    entry.ScannerAtRange++;
+                                    entry.MovingDown = true;
+                                }
+                            }
+                        }
+                    }
+                    picosecond++;
+                    currentDepth++;
+                }
+
+                foreach (var caughtEntry in caught)
+                {
+                    severity += caughtEntry.Depth * caughtEntry.Range;
+                }
+
+                if (caught.Count == 0)
+                {
+                    //we made it
+                    break;
+                }
+
+                delay++;
             }
+
             return severity;
         }
 
