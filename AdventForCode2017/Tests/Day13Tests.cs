@@ -16,7 +16,19 @@ namespace AdventOfCode2017.Tests
             entries.Add(new FirewallEntry { Depth = 4, Range = 4 });
             entries.Add(new FirewallEntry { Depth = 6, Range = 4 });
 
-            Assert.AreEqual(24, Day13.GetResult(entries));
+            Assert.AreEqual(24, Day13.GetResult(entries, 0, true));
+        }
+
+        [TestMethod]
+        public void TestTwo()
+        {
+            var entries = new List<FirewallEntry>();
+            entries.Add(new FirewallEntry { Depth = 0, Range = 3 });
+            entries.Add(new FirewallEntry { Depth = 1, Range = 2 });
+            entries.Add(new FirewallEntry { Depth = 4, Range = 4 });
+            entries.Add(new FirewallEntry { Depth = 6, Range = 4 });
+
+            Assert.AreEqual(10, Day13.GetResultTwo(entries));
         }
     }
 }

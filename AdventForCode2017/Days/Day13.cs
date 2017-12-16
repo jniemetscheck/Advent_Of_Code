@@ -10,79 +10,86 @@ namespace AdventOfCode2017.Days
 
         public static int GetPart1Result()
         {
-            return GetResult(GetInput());
+            return GetResult(GetInput(), 0, true);
         }
 
-        public static int GetResult(List<FirewallEntry> firewallEntries)
+        public static int GetResultTwo(List<FirewallEntry> firewallEntries)
         {
             var picosecond = 0;
-            var filledFirewallEntries = GetFilledFirewallEntries(SetInitialState(firewallEntries));
-            var currentDepth = 0;
-            var caught = new List<FirewallEntry>();
-            var delay = 0;
-            var severity = 0;
-
+            firewallEntries = GetFilledFirewallEntries(firewallEntries);
             while (true)
             {
-                severity = 0;
+                var result = GetResult(firewallEntries, picosecond, false);
 
-                for (int i = 1; i <= filledFirewallEntries.Count; i++)
+                if (result == 0)
                 {
-                    foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
-                    {
-                        if (scannerAtBeginningEntry.Depth == currentDepth)
-                        {
-                            //we've been caught
-                            caught.Add(scannerAtBeginningEntry);
-                            break;
-                        }
-                    }
-                    foreach (var entry in filledFirewallEntries)
-                    {
-                        if (entry.Range > 0)
-                        {
-                            if (entry.MovingDown)
-                            {
-                                if (entry.ScannerAtRange < entry.Range)
-                                {
-                                    entry.ScannerAtRange++;
-                                }
-                                else if (entry.ScannerAtRange == entry.Range)
-                                {
-                                    entry.ScannerAtRange--;
-                                    entry.MovingDown = false;
-                                }
-                            }
-                            else
-                            {
-                                if (entry.ScannerAtRange > 1)
-                                {
-                                    entry.ScannerAtRange--;
-                                }
-                                else if (entry.ScannerAtRange == 1)
-                                {
-                                    entry.ScannerAtRange++;
-                                    entry.MovingDown = true;
-                                }
-                            }
-                        }
-                    }
-                    picosecond++;
-                    currentDepth++;
-                }
-
-                foreach (var caughtEntry in caught)
-                {
-                    severity += caughtEntry.Depth * caughtEntry.Range;
-                }
-
-                if (caught.Count == 0)
-                {
-                    //we made it
                     break;
                 }
 
-                delay++;
+                picosecond++;
+            }
+
+            return picosecond;
+        }
+
+        public static int GetResult(List<FirewallEntry> firewallEntries, int picosecondToStartAt, bool fillInEntries)
+        {
+            var picosecond = 0;
+            var filledFirewallEntries = fillInEntries ? GetFilledFirewallEntries(SetInitialState(firewallEntries)) : firewallEntries;
+            var currentDepth = 0 - picosecondToStartAt;
+            var caught = new List<FirewallEntry>();
+            var severity = 0;
+
+            severity = 0;
+
+            for (int i = 1; i <= filledFirewallEntries.Count + picosecondToStartAt; i++)
+            {
+                foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
+                {
+                    if (scannerAtBeginningEntry.Depth == currentDepth)
+                    {
+                        //we've been caught
+                        caught.Add(scannerAtBeginningEntry);
+                    }
+                }
+                foreach (var entry in filledFirewallEntries)
+                {
+                    if (entry.Range > 0)
+                    {
+                        if (entry.MovingDown)
+                        {
+                            if (entry.ScannerAtRange < entry.Range)
+                            {
+                                entry.ScannerAtRange++;
+                            }
+                            else if (entry.ScannerAtRange == entry.Range)
+                            {
+                                entry.ScannerAtRange--;
+                                entry.MovingDown = false;
+                            }
+                        }
+                        else
+                        {
+                            if (entry.ScannerAtRange > 1)
+                            {
+                                entry.ScannerAtRange--;
+                            }
+                            else if (entry.ScannerAtRange == 1)
+                            {
+                                entry.ScannerAtRange++;
+                                entry.MovingDown = true;
+                            }
+                        }
+                    }
+                }
+                picosecond++;
+
+                currentDepth++;
+            }
+
+            foreach (var caughtEntry in caught)
+            {
+                severity += caughtEntry.Depth * caughtEntry.Range;
             }
 
             return severity;
