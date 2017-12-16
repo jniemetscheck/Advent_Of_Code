@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Days\Day16.cs" />
     <Compile Include="Days\Day10.cs" />
     <Compile Include="Days\Day11.cs" />
     <Compile Include="Days\Day12.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Tests\Day13Tests.cs" />
     <Compile Include="Tests\Day15Tests.cs" />
     <Compile Include="Tests\Day14Tests.cs" />
+    <Compile Include="Tests\Day16Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -116,7 +118,7 @@
     <Content Include="Input\Day13.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Input\TempTest.txt">
+    <Content Include="Input\Day16.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
