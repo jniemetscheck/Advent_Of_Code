@@ -61,6 +61,7 @@
     <Compile Include="Days\Day13.cs" />
     <Compile Include="Days\Day14.cs" />
     <Compile Include="Days\Day15.cs" />
+    <Compile Include="Days\Day17.cs" />
     <Compile Include="Tests\Day09Tests.cs" />
     <Compile Include="Days\Day01.cs" />
     <Compile Include="Days\Day02.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Tests\Day15Tests.cs" />
     <Compile Include="Tests\Day14Tests.cs" />
     <Compile Include="Tests\Day16Tests.cs" />
+    <Compile Include="Tests\Day17Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
