@@ -16,7 +16,7 @@ namespace AdventOfCode2017.Days
         public static int GetResultTwo(List<FirewallEntry> firewallEntries)
         {
             var picosecond = 0;
-            firewallEntries = GetFilledFirewallEntries(firewallEntries);
+            firewallEntries = GetFilledFirewallEntries(SetInitialState(firewallEntries));
             while (true)
             {
                 var result = GetResult(firewallEntries, picosecond, false);
@@ -36,7 +36,7 @@ namespace AdventOfCode2017.Days
         {
             var picosecond = 0;
             var filledFirewallEntries = fillInEntries ? GetFilledFirewallEntries(SetInitialState(firewallEntries)) : firewallEntries;
-            var currentDepth = 0 - picosecondToStartAt;
+            var currentDepth = 0;
             var caught = new List<FirewallEntry>();
             var severity = 0;
 
@@ -44,14 +44,19 @@ namespace AdventOfCode2017.Days
 
             for (int i = 1; i <= filledFirewallEntries.Count + picosecondToStartAt; i++)
             {
-                foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
+                //only do this check if we're actually riding
+                if (i > picosecondToStartAt && currentDepth > 0)
                 {
-                    if (scannerAtBeginningEntry.Depth == currentDepth)
+                    foreach (var scannerAtBeginningEntry in filledFirewallEntries.Where(x => x.ScannerAtRange == 1 && x.Range > 0))
                     {
-                        //we've been caught
-                        caught.Add(scannerAtBeginningEntry);
+                        if (scannerAtBeginningEntry.Depth == currentDepth)
+                        {
+                            //we've been caught
+                            caught.Add(scannerAtBeginningEntry);
+                        }
                     }
                 }
+
                 foreach (var entry in filledFirewallEntries)
                 {
                     if (entry.Range > 0)
@@ -84,7 +89,10 @@ namespace AdventOfCode2017.Days
                 }
                 picosecond++;
 
-                currentDepth++;
+                if (i > picosecondToStartAt)
+                {
+                    currentDepth++;
+                }
             }
 
             foreach (var caughtEntry in caught)
