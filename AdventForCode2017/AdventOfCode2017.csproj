@@ -63,6 +63,7 @@
     <Compile Include="Days\Day15.cs" />
     <Compile Include="Days\Day17.cs" />
     <Compile Include="Days\Day18.cs" />
+    <Compile Include="Days\Day19.cs" />
     <Compile Include="Tests\Day09Tests.cs" />
     <Compile Include="Days\Day01.cs" />
     <Compile Include="Days\Day02.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Tests\Day16Tests.cs" />
     <Compile Include="Tests\Day17Tests.cs" />
     <Compile Include="Tests\Day18Tests.cs" />
+    <Compile Include="Tests\Day19Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -127,6 +129,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Input\Day18.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Input\Day19.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
