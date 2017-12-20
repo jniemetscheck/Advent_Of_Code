@@ -10,12 +10,18 @@ namespace AdventOfCode2017.Days
 
         public static string GetPart1Result()
         {
-            return GetPart1Result(GetMap());
+            return GetResult(GetMap()).Path;
         }
 
-        public static string GetPart1Result(List<List<string>> map)
+        public static int GetPart2Result()
+        {
+            return GetResult(GetMap()).Steps;
+        }
+
+        public static (string Path, int Steps) GetResult(List<List<string>> map)
         {
             var path = string.Empty;
+            var numberOfSteps = 1;
             var travelDirection = TravelDirection.Down;
             var currentY = 0;
             var currentX = map[currentY].IndexOf("|");
@@ -146,6 +152,7 @@ namespace AdventOfCode2017.Days
                         break;
                     case " ":
                         currentX = -1;
+                        numberOfSteps--;
                         break;
                     default:
                         //  letter, add to list
@@ -169,13 +176,15 @@ namespace AdventOfCode2017.Days
                         break;
                 }
 
+                numberOfSteps++;
+
                 if (currentX < 0 || currentY < 0 || currentY >= map.Count || currentX >= map[currentY].Count)
                 {
                     break;
                 }
             }
 
-            return path;
+            return (path, numberOfSteps);
         }
 
         private static List<List<string>> GetMap()

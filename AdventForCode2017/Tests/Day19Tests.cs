@@ -14,6 +14,17 @@ namespace AdventOfCode2017.Tests
         [TestMethod]
         public void TestOne()
         {
+            Assert.AreEqual("ABCDEF", Day19.GetResult(GetMap()).Path);
+        }
+
+        [TestMethod]
+        public void TestTwo()
+        {
+            Assert.AreEqual(38, Day19.GetResult(GetMap()).Steps);
+        }
+
+        private List<List<string>> GetMap()
+        {
             var map = new List<List<string>>();
             map.Add("    |         ".Select(c => c.ToString()).ToList());
             map.Add("    |  +--+   ".Select(c => c.ToString()).ToList());
@@ -22,7 +33,7 @@ namespace AdventOfCode2017.Tests
             map.Add("    |  |  |  D".Select(c => c.ToString()).ToList());
             map.Add("    +B-+  +--+".Select(c => c.ToString()).ToList());
 
-            Assert.AreEqual("ABCDEF", Day19.GetPart1Result(map));
+            return map;
         }
     }
 }
