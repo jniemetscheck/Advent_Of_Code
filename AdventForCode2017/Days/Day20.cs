@@ -11,13 +11,25 @@ namespace AdventOfCode2017.Days
 
         public static int GetPart1Result()
         {
-            return GetPart1Result(GetParticles());
+            return GetResult(GetParticles()).ClosestToZero;
         }
 
-        public static int GetPart1Result(List<Particle> particles)
+        public static int GetPart2Result()
         {
-            for (int i = 0; i < 10000; i++)
+            return GetResult(GetParticles(), true).LastParticleLeft;
+        }
+
+        public static (int ClosestToZero, int LastParticleLeft) GetResult(List<Particle> particles, bool removeCollisions = false)
+        {
+            var currentParticleCount = particles.Count;
+            var lastParticleCount = currentParticleCount + 1;
+            var timesTheSame = 0;
+            var getOut = false;
+
+            for (int i = 0; i < 1000; i++)
             {
+                var matches = new Dictionary<string, List<Particle>>();
+
                 foreach (var particle in particles)
                 {
                     particle.Velocity.X += particle.Acceleration.X;
@@ -28,11 +40,57 @@ namespace AdventOfCode2017.Days
                     particle.Position.Z += particle.Velocity.Z;
 
                     particle.CurrentPosition = Math.Abs(particle.Position.X) + Math.Abs(particle.Position.Y) + Math.Abs(particle.Position.Z);
+
+                    var particlePosition = particle.Position.ToString();
+                    if (matches.ContainsKey(particlePosition))
+                    {
+                        matches[particlePosition].Add(particle);
+                    }
+                    else
+                    {
+                        matches.Add(particlePosition, new List<Particle> { particle });
+                    }
+                }
+
+                if (removeCollisions)
+                {
+                    var duplicates = matches.Where(m => m.Value.Count > 1);
+
+                    foreach (var duplicate in duplicates)
+                    {
+                        foreach (var duplicateItem in duplicate.Value)
+                        {
+                            particles.Remove(duplicateItem);
+                        }
+
+                        if (lastParticleCount == particles.Count)
+                        {
+                            if (timesTheSame == 5)
+                            {
+                                //we're done
+                                getOut = true;
+                            }
+                            else
+                            {
+                                timesTheSame++;
+                            }
+                        }
+                        else
+                        {
+                            lastParticleCount = particles.Count;
+                        }
+                    }
+                }
+
+                if (getOut)
+                {
+                    break;
                 }
             }
 
             var orderedParticles = particles.OrderBy(p => p.CurrentPosition).ToList();
-            return orderedParticles.FirstOrDefault().Identifier;
+
+            return (orderedParticles.FirstOrDefault().Identifier, lastParticleCount);
         }
 
         private static List<Particle> GetParticles()
@@ -79,5 +137,10 @@ namespace AdventOfCode2017.Days
         public long X { get; set; }
         public long Y { get; set; }
         public long Z { get; set; }
+
+        public override string ToString()
+        {
+            return "X=" + X + "Y=" + Y + "Z=" + Z;
+        }
     }
 }

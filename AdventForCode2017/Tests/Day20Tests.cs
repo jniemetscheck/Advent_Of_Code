@@ -14,7 +14,19 @@ namespace AdventOfCode2017.Tests
             particles.Add(new Particle { Identifier = 0, Position = new Coordinates { X = 3, Y = 0, Z = 0 }, Velocity = new Coordinates { X = 2, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = -1, Y = 0, Z = 0 } });
             particles.Add(new Particle { Identifier = 1, Position = new Coordinates { X = 4, Y = 0, Z = 0 }, Velocity = new Coordinates { X = 0, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = -2, Y = 0, Z = 0 } });
 
-            Assert.AreEqual(0, Day20.GetPart1Result(particles));
+            Assert.AreEqual(0, Day20.GetResult(particles).ClosestToZero);
+        }
+
+        [TestMethod]
+        public void TestTwo()
+        {
+            var particles = new List<Particle>();
+            particles.Add(new Particle { Identifier = 0, Position = new Coordinates { X = -6, Y = 0, Z = 0 }, Velocity = new Coordinates { X = 3, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = 0, Y = 0, Z = 0 } });
+            particles.Add(new Particle { Identifier = 0, Position = new Coordinates { X = -4, Y = 0, Z = 0 }, Velocity = new Coordinates { X = 2, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = 0, Y = 0, Z = 0 } });
+            particles.Add(new Particle { Identifier = 0, Position = new Coordinates { X = -2, Y = 0, Z = 0 }, Velocity = new Coordinates { X = 1, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = 0, Y = 0, Z = 0 } });
+            particles.Add(new Particle { Identifier = 0, Position = new Coordinates { X = 3, Y = 0, Z = 0 }, Velocity = new Coordinates { X = -1, Y = 0, Z = 0 }, Acceleration = new Coordinates { X = 0, Y = 0, Z = 0 } });
+
+            Assert.AreEqual(1, Day20.GetResult(particles, true).LastParticleLeft);
         }
     }
 }
