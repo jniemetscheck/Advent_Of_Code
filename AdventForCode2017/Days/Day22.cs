@@ -28,23 +28,33 @@ namespace AdventOfCode2017.Days
             {
                 var currentNode = map[currentRowIndex][currentColumnIndex];
 
-                if (currentNode.IsInfected)
+                if (!isResistantVirus)
                 {
-                    currentlyFacing = GetNewDirection(currentlyFacing, ThisDay.Direction.Right);
+                    if (currentNode.CurrentState == State.Infected)
+                    {
+                        currentlyFacing = GetNewDirection(currentlyFacing, ThisDay.Direction.Right);
+                    }
+                    else
+                    {
+                        currentlyFacing = GetNewDirection(currentlyFacing, ThisDay.Direction.Left);
+                        newlyInfectedCount++;
+                    }
+
+                    currentNode.CurrentlyFacing = currentlyFacing;
+                    currentNode.CurrentState = currentNode.CurrentState == State.Infected ? State.NotInfected : State.Infected;
+
+                    var (NewRowIndex, NewtColumnIndex) = MoveForward(currentRowIndex, currentColumnIndex, currentlyFacing, map);
+
+                    currentRowIndex = NewRowIndex;
+                    currentColumnIndex = NewtColumnIndex;
                 }
                 else
                 {
-                    currentlyFacing = GetNewDirection(currentlyFacing, ThisDay.Direction.Left);
-                    newlyInfectedCount++;
+                    if (currentNode.CurrentState != State.Weakened)
+                    {
+                        
+                    }
                 }
-
-                currentNode.CurrentlyFacing = currentlyFacing;
-                currentNode.IsInfected = !currentNode.IsInfected;
-
-                var (NewRowIndex, NewtColumnIndex) = MoveForward(currentRowIndex, currentColumnIndex, currentlyFacing, map);
-
-                currentRowIndex = NewRowIndex;
-                currentColumnIndex = NewtColumnIndex;
             }
 
             return newlyInfectedCount;
@@ -61,7 +71,7 @@ namespace AdventOfCode2017.Days
                         var newRow = new List<Coordinate>();
                         for (int i = 0; i < map[currentRowIndex].Count; i++)
                         {
-                            newRow.Add(new Coordinate());
+                            newRow.Add(new Coordinate { CurrentState = State.NotInfected });
                         }
                         map.Insert(0, newRow);
                         currentRowIndex++;
@@ -74,7 +84,7 @@ namespace AdventOfCode2017.Days
                         //add new item to every row
                         foreach (var item in map)
                         {
-                            item.Add(new Coordinate());
+                            item.Add(new Coordinate { CurrentState = State.NotInfected });
                         }
                     }
                     currentColumnIndex++;
@@ -86,7 +96,7 @@ namespace AdventOfCode2017.Days
                         var newRow = new List<Coordinate>();
                         for (int i = 0; i < map[currentRowIndex].Count; i++)
                         {
-                            newRow.Add(new Coordinate());
+                            newRow.Add(new Coordinate { CurrentState = State.NotInfected });
                         }
                         map.Add(newRow);
                     }
@@ -98,7 +108,7 @@ namespace AdventOfCode2017.Days
                         //insert new item in each row
                         foreach (var item in map)
                         {
-                            item.Insert(0, new Coordinate());
+                            item.Insert(0, new Coordinate { CurrentState = State.NotInfected });
                         }
                         currentColumnIndex = 1;
                     }
@@ -151,7 +161,7 @@ namespace AdventOfCode2017.Days
                 foreach (var item in segments)
                 {
                     var coordinate = new ThisDay.Coordinate();
-                    coordinate.IsInfected = item == '#';
+                    coordinate.CurrentState = item == '#' ? State.Infected : State.NotInfected;
 
                     mapItem.Add(coordinate);
                 }
@@ -168,10 +178,16 @@ namespace AdventOfCode2017.Day22
 {
     public class Coordinate
     {
-        public bool WasOriginallyInfected { get; set; }
-        public bool IsInfected { get; set; }
-        public bool IsWeakened { get; set; }
+        public State CurrentState { get; set; }
         public Direction CurrentlyFacing { get; set; }
+    }
+
+    public enum State
+    {
+        Infected,
+        Weakened,
+        Flagged,
+        NotInfected
     }
 
     public enum Direction
