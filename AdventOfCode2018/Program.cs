@@ -18,8 +18,8 @@ namespace AdventOfCode2018
             //Console.WriteLine($"Result for Day 04-Part 1: {Days.Day04.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 04-Part 2: {Days.Day04.GetPart2Result()}");
             //Console.WriteLine();
-            Console.WriteLine($"Result for Day 05-Part 1: {Days.Day05.GetPart1Result()}");
-            //Console.WriteLine($"Result for Day 05-Part 2: {Days.Day05.GetPart2Result()}");
+            //Console.WriteLine($"Result for Day 05-Part 1: {Days.Day05.GetPart1Result()}");
+            Console.WriteLine($"Result for Day 05-Part 2: {Days.Day05.GetPart2Result()}");
             //Console.WriteLine();
             //Console.WriteLine($"Result for Day 06-Part 1: {Days.Day06.GetPart1Result()}");
             //Console.WriteLine($"Result for Day 06-Part 2: {Days.Day06.GetPart2Result()}");

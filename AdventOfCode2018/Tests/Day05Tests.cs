@@ -11,7 +11,15 @@ namespace AdventOfCode2018.Tests
         {
             const string input = "dabAcCaCBAcCcaDA";
 
-            Assert.AreEqual(10, Day05.GetResult(input).UnitsRemaining);
+            Assert.AreEqual(10, Day05.GetNumberOfUnitsRemaining(input));
+        }
+
+        [TestMethod]
+        public void Part2_TestOne()
+        {
+            const string input = "dabAcCaCBAcCcaDA";
+
+            Assert.AreEqual(4, Day05.GetMinimumUnitsLength(input));
         }
     }
 }

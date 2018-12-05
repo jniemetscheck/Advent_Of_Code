@@ -13,10 +13,17 @@ namespace AdventOfCode2018.Days
         {
             var input = File.ReadAllText(FilePath);
 
-            return GetResult(input).UnitsRemaining;
+            return GetNumberOfUnitsRemaining(input);
         }
 
-        public static (int UnitsRemaining, int Part2) GetResult(string input)
+        public static int GetPart2Result()
+        {
+            var input = File.ReadAllText(FilePath);
+
+            return GetMinimumUnitsLength(input);
+        }
+
+        public static int GetNumberOfUnitsRemaining(string input)
         {
             var units = input.Select(x => x.ToString()).ToList();
 
@@ -34,7 +41,40 @@ namespace AdventOfCode2018.Days
                 length = units.Count;
             }
 
-            return (units.Count, 0);
+            return units.Count;
+        }
+
+        public static int GetMinimumUnitsLength(string input)
+        {
+            var units = input.Select(x => x.ToString()).ToList();
+            var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Select(x => x.ToString().ToLower()).ToList();
+            var minimumLength = units.Count;
+
+            foreach (var letter in letters)
+            {
+                var temp = new List<string>(units);
+                var length = temp.Count;
+                temp.RemoveAll(r => r == letter.ToLower() || r == letter.ToUpper());
+
+                while (true)
+                {
+                    temp = GetStripped(temp);
+
+                    if (length == temp.Count)
+                    {
+                        break;
+                    }
+
+                    length = temp.Count;
+                }
+
+                if (minimumLength > length)
+                {
+                    minimumLength = length;
+                }
+            }
+
+            return minimumLength;
         }
 
         private static List<string> GetStripped(List<string> units)
