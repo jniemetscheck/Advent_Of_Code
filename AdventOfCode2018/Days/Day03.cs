@@ -9,17 +9,20 @@ namespace AdventOfCode2018.Days
     {
         private static readonly string FilePath = Directory.GetCurrentDirectory() + @"/Input/Day03.txt";
 
-        public static int GetPart1Result()
+        public static (int OverlappingCount, int NonOverlappingClaimId) GetResult()
         {
             var lines = File.ReadAllLines(FilePath);
+            var result = GetResult(lines.ToList());
 
-            return GetOverlappingCount(lines.ToList());
+            return (result.OverlappingCount, result.NonOverlappingClaimId);
         }
 
-        public static int GetOverlappingCount(List<string> lines)
+        public static (int OverlappingCount, int NonOverlappingClaimId) GetResult(List<string> lines)
         {
             var claims = GetClaims(lines);
             var grid = GetInitiatedGrid(1000, 1000);
+            var overlappingClaims = new List<Claim>();
+            var nonOverlappingClaim = new Claim();
 
             foreach (var claim in claims)
             {
@@ -28,12 +31,33 @@ namespace AdventOfCode2018.Days
                 {
                     for (int j = claim.ColumnStart; j < claim.ColumnStart + claim.Width; j++)
                     {
+                        if (grid.FirstOrDefault(item => item.Key.Column == j && item.Key.Row == i).Value.Count == 1)
+                        {
+                            if (!overlappingClaims.Contains(grid.FirstOrDefault(item => item.Key.Column == j && item.Key.Row == i).Value[0]))
+                            {
+                                overlappingClaims.Add(grid.FirstOrDefault(item => item.Key.Column == j && item.Key.Row == i).Value[0]);
+                            }
+
+                            if (!overlappingClaims.Contains(claim))
+                            {
+                                overlappingClaims.Add(claim);
+                            }
+                        }
                         grid.FirstOrDefault(item => item.Key.Column == j && item.Key.Row == i).Value.Add(claim);
                     }
                 }
             }
 
-            return grid.Count(g => g.Value.Count > 1);
+            foreach (var claim in claims)
+            {
+                if (!overlappingClaims.Contains(claim))
+                {
+                    nonOverlappingClaim = claim;
+                    break;
+                }
+            }
+
+            return (grid.Count(g => g.Value.Count > 1), nonOverlappingClaim.Id);
         }
 
         private static Dictionary<Coordinate, List<Claim>> GetInitiatedGrid(int columns, int rows)

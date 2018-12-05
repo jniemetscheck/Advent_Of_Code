@@ -12,7 +12,15 @@ namespace AdventOfCode2018.Tests
         {
             var lines = new List<string> { "#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2" };
 
-            Assert.AreEqual(4, Day03.GetOverlappingCount(lines));
+            Assert.AreEqual(4, Day03.GetResult(lines).OverlappingCount);
+        }
+
+        [TestMethod]
+        public void Part2_TestOne()
+        {
+            var lines = new List<string> { "#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2" };
+
+            Assert.AreEqual(3, Day03.GetResult(lines).NonOverlappingClaimId);
         }
     }
 }
