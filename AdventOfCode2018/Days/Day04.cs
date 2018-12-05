@@ -13,10 +13,17 @@ namespace AdventOfCode2018.Days
         {
             var lines = File.ReadAllLines(FilePath);
 
-            return GetSleepiestGuardResult(lines.ToList());
+            return GetSleepiestGuardResult(lines.ToList()).TotalSleepiest;
         }
 
-        public static int GetSleepiestGuardResult(List<string> lines)
+        public static int GetPart2Result()
+        {
+            var lines = File.ReadAllLines(FilePath);
+
+            return GetSleepiestGuardResult(lines.ToList()).SleepiestSameTime;
+        }
+
+        public static (int TotalSleepiest, int SleepiestSameTime) GetSleepiestGuardResult(List<string> lines)
         {
             var activities = GetSortedActivities(lines);
             var guardSleepTimes = new Dictionary<int, GuardSleepTime>();
@@ -69,8 +76,25 @@ namespace AdventOfCode2018.Days
 
             var sleepiestGuard = guardSleepTimes.OrderByDescending(s => s.Value.TotalSleepTime).FirstOrDefault();
             var sleepiestMinute = sleepiestGuard.Value.MinutesSleeping.OrderByDescending(m => m.Value).FirstOrDefault().Key;
-            
-            return sleepiestGuard.Key * sleepiestMinute;
+
+            var sleepiestGuardId = 0;
+            var sleepiestGuardMinute = 0;
+            var sleepiestGuardFrequency = 0;
+
+            foreach (var guardSleepTime in guardSleepTimes)
+            {
+                foreach (var sleepTime in guardSleepTime.Value.MinutesSleeping)
+                {
+                    if (sleepTime.Value > sleepiestGuardFrequency)
+                    {
+                        sleepiestGuardFrequency = sleepTime.Value;
+                        sleepiestGuardId = guardSleepTime.Key;
+                        sleepiestGuardMinute = sleepTime.Key;
+                    }
+                }
+            }
+
+            return (sleepiestGuard.Key * sleepiestMinute, sleepiestGuardId * sleepiestGuardMinute);
         }
 
         private static List<Activity> GetSortedActivities(List<string> lines)
