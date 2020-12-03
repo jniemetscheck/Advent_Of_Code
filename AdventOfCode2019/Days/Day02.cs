@@ -15,17 +15,44 @@ namespace AdventOfCode2019.Days
             return GetPositionWhenProgramHalts(input.Split(',').ToList());
         }
 
-        //public static int GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
+        public static int GetResultPartTwo()
+        {
+            var answer = 0;
 
-        //    return GetTotalFuelRequirements(lines.ToList());
-        //}
+            for (var i = 0; i <= 99; i++)
+            {
+                var done = false;
+
+                for (var j = 0; j <= 99; j++)
+                {
+                    var input = File.ReadAllText(FilePath).Split(',').ToList();
+
+                    input[1] = i.ToString();
+                    input[2] = j.ToString();
+                    var result = GetPositionWhenProgramHalts(input);
+
+                    if (result == 19690720)
+                    {
+                        answer = 100 * i + j;
+                        done = true;
+                        break;
+                    }
+                }
+
+                if (done)
+                {
+                    break;
+                }
+            }
+
+
+            return answer;
+        }
 
         public static int GetPositionWhenProgramHalts(List<string> inputs)
         {
             var position = 0;
-            var value = -1;
+            int value;
 
             while (true)
             {
@@ -50,7 +77,6 @@ namespace AdventOfCode2019.Days
                 {
                     inputs[instruction.OutputPosition] = (int.Parse(inputs[instruction.InputOnePosition]) * int.Parse(inputs[instruction.InputTwoPosition])).ToString();
                 }
-
 
                 position += 4;
             }
