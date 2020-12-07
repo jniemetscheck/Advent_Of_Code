@@ -18,6 +18,15 @@ namespace AdventOfCode2020.Days
             return BagsThatContainAnotherBag("shiny gold", rules).Distinct().Count();
         }
 
+        public static int GetResultPartTwo()
+        {
+            var input = File.ReadAllLines(FilePath);
+
+            var rules = GetMappedBagRules(input.ToList());
+
+            return GetBagsNeeded("shiny gold", rules);
+        }
+
         public static List<string> BagsThatContainAnotherBag(string anotherBag, List<BagRule> rules)
         {
             var bagColors = new List<string>();
@@ -31,6 +40,23 @@ namespace AdventOfCode2020.Days
             }
 
             return bagColors;
+        }
+
+        public static int GetBagsNeeded(string bag, List<BagRule> rules)
+        {
+            var count = 0;
+            var outerBag = rules.FirstOrDefault(r => r.Description == bag);
+
+            if (outerBag != null)
+            {
+                foreach (var containedBag in outerBag.ContainedBags)
+                {
+                    count += containedBag.Value;
+                    count += containedBag.Value * GetBagsNeeded(containedBag.Key, rules);
+                }
+            }
+
+            return count;
         }
 
         public static List<BagRule> GetMappedBagRules(List<string> bagRules)
