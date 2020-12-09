@@ -15,6 +15,15 @@ namespace AdventOfCode2020.Days
             return GetFirstInvalidNumber(input, 25);
         }
 
+        public static double GetResultPartTwo()
+        {
+            var input = File.ReadAllLines(FilePath).Select(double.Parse).ToList();
+
+            var invalidNumber = GetFirstInvalidNumber(input, 25);
+
+            return GetEncryptionWeakness(input, invalidNumber);
+        }
+
         public static double GetFirstInvalidNumber(List<double> input, int preambleLength)
         {
             var invalidNumber = -1d;
@@ -62,6 +71,46 @@ namespace AdventOfCode2020.Days
             }
 
             return invalidNumber;
+        }
+
+        public static double GetEncryptionWeakness(List<double> input, double invalidNumber)
+        {
+            var invalidNumberIndex = input.IndexOf(invalidNumber);
+            var codes = input.Take(invalidNumberIndex).ToList();
+            var validNumbers = new List<double>();
+            var accumulator = 0d;
+
+            var skip = 1;
+            foreach (var code in codes)
+            {
+                validNumbers = new List<double>();
+
+                validNumbers.Add(code);
+
+                accumulator = code;
+                var innerCodes = codes.Skip(skip).ToList();
+
+                foreach (var innerCode in innerCodes)
+                {
+                    validNumbers.Add(innerCode);
+                    accumulator += innerCode;
+
+                    if (accumulator >= invalidNumber)
+                    {
+                        break;
+                    }
+                }
+
+                if (accumulator == invalidNumber)
+                {
+                    break;
+                }
+
+                skip++;
+            }
+
+            return validNumbers.OrderBy(o => o).First() + validNumbers.OrderBy(o => o).Last();
+
         }
     }
 }
