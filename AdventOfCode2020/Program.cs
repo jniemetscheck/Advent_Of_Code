@@ -36,8 +36,8 @@ namespace AdventOfCode2020
             //Console.WriteLine($"Result for Day 10 Part 1: {Days.Day10.GetResultPartOne()}");
             //Console.WriteLine($"Result for Day 10 Part 2: {new Days.Day10PartB().Solve()}");
 
-            Console.WriteLine($"Result for Day 11 Part 1: {Days.Day11.GetResultPartOne()}");
-            //Console.WriteLine($"Result for Day 11 Part 2: {Days.Day1.GetResultPartTwo()}");
+            //Console.WriteLine($"Result for Day 11 Part 1: {Days.Day11.GetResultPartOne()}");
+            Console.WriteLine($"Result for Day 11 Part 2: {Days.Day11.GetResultPartTwo()}");
 
             Console.ReadLine();
         }

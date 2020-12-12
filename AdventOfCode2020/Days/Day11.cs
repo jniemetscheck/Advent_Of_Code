@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace AdventOfCode2020.Days
@@ -16,7 +16,15 @@ namespace AdventOfCode2020.Days
             var input = File.ReadAllLines(FilePath).ToList();
             var seatingChart = GetMappedSeatingChart(input);
 
-            return GetNumberOfOccupiedSeats(seatingChart);
+            return GetNumberOfOccupiedSeats(seatingChart, HasNoAdjacentOccupiedSeats, 4);
+        }
+
+        public static double GetResultPartTwo()
+        {
+            var input = File.ReadAllLines(FilePath).ToList();
+            var seatingChart = GetMappedSeatingChart(input);
+
+            return GetNumberOfOccupiedSeats(seatingChart, HasNoAdjacentOccupiedSeatsExtended, 5);
         }
 
         public static List<List<Seat>> GetMappedSeatingChart(List<string> input)
@@ -40,7 +48,7 @@ namespace AdventOfCode2020.Days
             return seatingChart;
         }
 
-        public static int GetNumberOfOccupiedSeats(List<List<Seat>> seatingChart)
+        public static int GetNumberOfOccupiedSeats(List<List<Seat>> seatingChart, Func<List<List<Seat>>, int, int, bool> occupancyCheckFunc, int limit)
         {
             while (true)
             {
@@ -52,17 +60,17 @@ namespace AdventOfCode2020.Days
                     //add new row
                     newSeatingChart.Add(new List<Seat>());
 
-                    for (int j = 0; j < seatingChart[i].Count; j++)
+                    for (var j = 0; j < seatingChart[i].Count; j++)
                     {
                         //add new seat
                         newSeatingChart[i].Add(new Seat { Status = seatingChart[i][j].Status });
 
-                        if (seatingChart[i][j].Status == SeatStatus.Empty && !HasAdjacentOccupiedSeats(seatingChart, i, j))
+                        if (seatingChart[i][j].Status == SeatStatus.Empty && occupancyCheckFunc(seatingChart, i, j))
                         {
                             newSeatingChart[i][j].Status = SeatStatus.Occupied;
                             hasChanged = true;
                         }
-                        else if (seatingChart[i][j].Status == SeatStatus.Occupied && HasExceededAdjecentSeatOccupancyLimit(seatingChart, i, j))
+                        else if (seatingChart[i][j].Status == SeatStatus.Occupied && HasExceededAdjacentSeatOccupancyLimit(seatingChart, i, j, limit))
                         {
                             newSeatingChart[i][j].Status = SeatStatus.Empty;
                             hasChanged = true;
@@ -77,13 +85,13 @@ namespace AdventOfCode2020.Days
 
                 seatingChart = newSeatingChart;
 
-                //WriteOutSeatingChart(seatingChart);
+                WriteOutSeatingChart(seatingChart);
             }
 
             return GetOccupiedSeatCount(seatingChart);
         }
 
-        public static bool HasAdjacentOccupiedSeats(List<List<Seat>> seatingChart, int currentRow, int currentSeat)
+        public static bool HasNoAdjacentOccupiedSeats(List<List<Seat>> seatingChart, int currentRow, int currentSeat)
         {
             var hasAdjacentOccupiedSeats = false;
 
@@ -110,10 +118,91 @@ namespace AdventOfCode2020.Days
                 }
             }
 
-            return hasAdjacentOccupiedSeats;
+            return !hasAdjacentOccupiedSeats;
         }
 
-        public static bool HasExceededAdjecentSeatOccupancyLimit(List<List<Seat>> seatingChart, int currentRow, int currentSeat)
+        public static bool HasNoAdjacentOccupiedSeatsExtended(List<List<Seat>> seatingChart, int currentRow, int currentSeat)
+        {
+            var occupiedSeatCount = 0;
+
+            //front
+            for (int f = 0; f < currentRow; f++)
+            {
+                if (seatingChart[f][currentSeat].Status == SeatStatus.Empty)
+                {
+                    break;
+                }
+                if (seatingChart[f][currentSeat].Status == SeatStatus.Occupied)
+                {
+                    occupiedSeatCount++;
+                    break;
+                }
+            }
+
+            //left
+            for (int l = 0; l < currentSeat; l++)
+            {
+                if (seatingChart[currentRow][l].Status == SeatStatus.Empty)
+                {
+                    break;
+                }
+                if (seatingChart[currentRow][l].Status == SeatStatus.Occupied)
+                {
+                    occupiedSeatCount++;
+                    break;
+                }
+            }
+
+            //right
+            for (int r = currentSeat + 1; r < seatingChart[currentRow].Count; r++)
+            {
+                if (seatingChart[currentRow][r].Status == SeatStatus.Empty)
+                {
+                    break;
+                }
+                if (seatingChart[currentRow][r].Status == SeatStatus.Occupied)
+                {
+                    occupiedSeatCount++;
+                    break;
+                }
+            }
+
+            //behind
+            for (int b = currentRow + 1; b < seatingChart.Count; b++)
+            {
+                if (seatingChart[b][currentSeat].Status == SeatStatus.Empty)
+                {
+                    break;
+                }
+                if (seatingChart[b][currentSeat].Status == SeatStatus.Occupied)
+                {
+                    occupiedSeatCount++;
+                    break;
+                }
+            }
+
+
+            //diag front left
+            var thisSeat = currentSeat - 1;
+            for (int fl = currentRow - 1; fl > 0; fl--)
+            {
+                if (seatingChart[fl].ElementAtOrDefault(thisSeat) == null || seatingChart[fl][thisSeat].Status == SeatStatus.Empty)
+                {
+                    break;
+                }
+
+                if (seatingChart[fl][thisSeat].Status == SeatStatus.Occupied)
+                {
+                    occupiedSeatCount++;
+                    break;
+                }
+                thisSeat--;
+            }
+
+            return occupiedSeatCount < 5;
+        }
+
+        public static bool HasExceededAdjacentSeatOccupancyLimit(List<List<Seat>> seatingChart, int currentRow, int currentSeat, int limit)
         {
             var occupiedSeatCount = 0;
 
@@ -134,7 +223,7 @@ namespace AdventOfCode2020.Days
                 }
             }
 
-            return occupiedSeatCount >= 4;
+            return occupiedSeatCount >= limit;
         }
 
         public static int GetOccupiedSeatCount(List<List<Seat>> seatingChart)
