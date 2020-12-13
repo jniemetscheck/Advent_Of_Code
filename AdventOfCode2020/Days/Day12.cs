@@ -9,7 +9,7 @@ namespace AdventOfCode2020.Days
     {
         private static readonly string FilePath = Directory.GetCurrentDirectory() + @"/Input/Day12.txt";
 
-        public static double GetResultPartOne()
+        public static int GetResultPartOne()
         {
             var input = File.ReadAllLines(FilePath).ToList();
             var instructions = GetShipEvasiveInstructions(input);
@@ -17,7 +17,7 @@ namespace AdventOfCode2020.Days
             return ProcessInstructions(instructions, Direction.East, 0, 0);
         }
 
-        public static double GetResultPartTwo()
+        public static int GetResultPartTwo()
         {
             var input = File.ReadAllLines(FilePath).ToList();
             var instructions = GetShipEvasiveInstructions(input);
