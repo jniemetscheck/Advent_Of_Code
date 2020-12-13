@@ -14,7 +14,15 @@ namespace AdventOfCode2020.Days
             var input = File.ReadAllLines(FilePath).ToList();
             var instructions = GetShipEvasiveInstructions(input);
 
-            return ProcessInstructions(instructions, Direction.East);
+            return ProcessInstructions(instructions, Direction.East, 0, 0);
+        }
+
+        public static double GetResultPartTwo()
+        {
+            var input = File.ReadAllLines(FilePath).ToList();
+            var instructions = GetShipEvasiveInstructions(input);
+
+            return ProcessWaypointInstructions(instructions, 0, 0, 10, 1);
         }
 
         public static List<EvasiveInstruction> GetShipEvasiveInstructions(List<string> input)
@@ -34,7 +42,7 @@ namespace AdventOfCode2020.Days
             switch (maneuverString)
             {
                 case "F":
-                    return Maneuver.GoForward;
+                    return Maneuver.Forward;
                 case "N":
                     return Maneuver.MoveNorth;
                 case "E":
@@ -52,16 +60,13 @@ namespace AdventOfCode2020.Days
             return Maneuver.Unknown;
         }
 
-        public static int ProcessInstructions(List<EvasiveInstruction> instructions, Direction currentlyFacing)
+        public static int ProcessInstructions(List<EvasiveInstruction> instructions, Direction currentlyFacing, int currentX, int currentY)
         {
-            var currentX = 0;
-            var currentY = 0;
-
             foreach (var instruction in instructions)
             {
                 switch (instruction.Manuever)
                 {
-                    case Maneuver.GoForward:
+                    case Maneuver.Forward:
                         switch (currentlyFacing)
                         {
                             case Direction.North:
@@ -129,6 +134,93 @@ namespace AdventOfCode2020.Days
 
             return Math.Abs(currentY) + Math.Abs(currentX);
         }
+
+        public static int ProcessWaypointInstructions(List<EvasiveInstruction> instructions, int currentX, int currentY, int relativeWaypointX, int relativeWaypointY)
+        {
+            var currentWaypointX = relativeWaypointX;
+            var currentWaypointY = relativeWaypointY;
+
+            foreach (var instruction in instructions)
+            {
+                switch (instruction.Manuever)
+                {
+                    case Maneuver.Forward:
+                        currentY += instruction.Distance * (currentWaypointY - currentY);
+                        currentX += instruction.Distance * (currentWaypointX - currentX);
+
+                        currentWaypointY = currentY + relativeWaypointY;
+                        currentWaypointX = currentX + relativeWaypointX;
+                        break;
+                    case Maneuver.TurnLeft:
+                        switch (instruction.Distance)
+                        {
+                            case 90:
+                                break;
+                            case 180:
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Maneuver.TurnRight:
+                        switch (instruction.Distance)
+                        {
+                            case 90:
+                                var tempRelativeCurrentWaypointX = relativeWaypointX;
+                                var tempRelativeCurrentWaypointY = relativeWaypointY;
+                                if (relativeWaypointY > 0)
+                                {
+                                    //north of ship, make it east of ship
+                                    relativeWaypointY = tempRelativeCurrentWaypointX;
+                                    currentWaypointY = currentY - relativeWaypointY;
+                                }
+                                else
+                                {
+                                    //south of ship, make it west of ship
+                                    relativeWaypointX = tempRelativeCurrentWaypointY;
+                                    currentWaypointX = currentX - relativeWaypointX;
+                                }
+
+                                if (relativeWaypointX > 0)
+                                {
+                                    //east of ship, make it south of ship
+                                    relativeWaypointX = relativeWaypointY;
+                                    currentWaypointX = currentX + relativeWaypointX;
+                                }
+                                else
+                                {
+                                    //west of ship, make it north of ship
+                                    relativeWaypointX = relativeWaypointY;
+                                    currentWaypointX = currentX + relativeWaypointX;
+                                }
+                                break;
+                            case 180:
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Maneuver.MoveNorth:
+                        currentWaypointY += instruction.Distance;
+                        relativeWaypointY = currentWaypointY - currentY;
+                        break;
+                    case Maneuver.MoveSouth:
+                        currentWaypointY -= instruction.Distance;
+                        relativeWaypointY = currentWaypointY - currentY;
+                        break;
+                    case Maneuver.MoveEast:
+                        currentWaypointX += instruction.Distance;
+                        relativeWaypointX = currentWaypointX - currentX;
+                        break;
+                    case Maneuver.MoveWest:
+                        currentWaypointX -= instruction.Distance;
+                        relativeWaypointX = currentWaypointX - currentX;
+                        break;
+                }
+            }
+
+            return Math.Abs(currentY) + Math.Abs(currentX);
+        }
     }
 
     public class EvasiveInstruction
@@ -139,7 +231,7 @@ namespace AdventOfCode2020.Days
 
     public enum Maneuver
     {
-        GoForward,
+        Forward,
         MoveNorth,
         MoveEast,
         MoveSouth,
