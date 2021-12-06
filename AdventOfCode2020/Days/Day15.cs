@@ -14,7 +14,8 @@ namespace AdventOfCode2020.Days
 
         public static int GetResultPartTwo()
         {
-            return GetNumber(2020, new List<int> { 1, 0, 18, 10, 19, 6 });
+            //return GetNumber(2020, new List<int> { 0, 3, 6 });
+            return GetNumber(30000000, new List<int> { 1, 0, 18, 10, 19, 6 });
         }
 
         public static int GetNumber(int numberPlace, List<int> startingNumbers)
@@ -53,7 +54,10 @@ namespace AdventOfCode2020.Days
         {
             var numberSpoken = 0;
 
-            foreach (var memoryKey in memory)
+            var defaultList = default(KeyValuePair<int, List<int>>);
+            var memoryKey = memory.FirstOrDefault(x => x.Value.Contains(lastPosition));
+
+            if (!memoryKey.Equals(defaultList))
             {
                 if (memoryKey.Value.Contains(lastPosition))
                 {
@@ -61,16 +65,32 @@ namespace AdventOfCode2020.Days
                     {
                         //first time
                         numberSpoken = 0;
-                        break;
                     }
                     else
                     {
                         //get distance
                         numberSpoken = memoryKey.Value[memoryKey.Value.Count - 1] - memoryKey.Value[memoryKey.Value.Count - 2];
-                        break;
                     }
                 }
             }
+            //foreach (var memoryKey in memory)
+            //{
+            //    if (memoryKey.Value.Contains(lastPosition))
+            //    {
+            //        if (memoryKey.Value.Count == 1)
+            //        {
+            //            //first time
+            //            numberSpoken = 0;
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            //get distance
+            //            numberSpoken = memoryKey.Value[memoryKey.Value.Count - 1] - memoryKey.Value[memoryKey.Value.Count - 2];
+            //            break;
+            //        }
+            //    }
+            //}
 
             return numberSpoken;
         }
