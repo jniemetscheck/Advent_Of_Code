@@ -24,71 +24,61 @@ namespace AdventOfCode2023.Days
             return GetSumOfCalibrationNumbersAndStrings(lines.ToList());
         }
 
+        private static readonly Dictionary<int, string> _wordNumbers = new Dictionary<int, string>()
+        {
+            { 1, "one" },
+            { 2, "two" },
+            { 3, "three" },
+            { 4, "four" },
+            { 5, "five" },
+            { 6, "six" },
+            { 7, "seven" },
+            { 8, "eight" },
+            { 9, "nine" }
+        };
+
         private static int GetSumOfCalibrationNumbersAndStrings(List<string> lines)
         {
             var total = 0;
             foreach (var line in lines)
             {
-                var indices = new Dictionary<int, string>();
+                var indices = new Dictionary<int, int>();
 
                 //check for numbers
                 for (var i = 0; i < line.Length; i++)
                 {
                     if (char.IsDigit(line[i]))
                     {
-                        indices.Add(i, line[i].ToString());
+                        indices.Add(i, int.Parse(line[i].ToString()));
                     }
                 }
 
                 //check for words
-                if (GetIndexOfNumberWord(line, "one").HasValue)
+                foreach (var wordNumber in _wordNumbers)
                 {
-                    indices.Add(GetIndexOfNumberWord(line, "one").Value, 1.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "two").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "two").Value, 2.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "three").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "three").Value, 3.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "four").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "four").Value, 4.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "five").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "five").Value, 5.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "six").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "six").Value, 6.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "seven").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "seven").Value, 7.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "eight").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "eight").Value, 8.ToString());
-                }
-                if (GetIndexOfNumberWord(line, "nine").HasValue)
-                {
-                    indices.Add(GetIndexOfNumberWord(line, "nine").Value, 9.ToString());
+                    if (line.Contains(wordNumber.Value))
+                    {
+                        var firstIndex = GetIndexOfNumberWord(line, wordNumber.Value).Value;
+                        var lastIndex = GetIndexOfNumberWord(line, wordNumber.Value, false).Value;
+
+                        indices.Add(firstIndex, wordNumber.Key);
+
+                        if (lastIndex != firstIndex)
+                        {
+                            indices.Add(lastIndex, wordNumber.Key);
+                        }
+                    }
                 }
 
                 //do total
                 if (indices.Count == 1)
                 {
-                    total += int.Parse(indices.First().Value + indices.First().Value);
+                    total += int.Parse((indices.First().Value.ToString()) + (indices.First().Value.ToString()));
                 }
                 else
                 {
-                    total += int.Parse(indices.OrderBy(o => o.Key).First().Value.ToString() + indices.OrderBy(o => o.Key).Last().Value.ToString());
+                    total += int.Parse((indices.OrderBy(o => o.Key).First().Value.ToString()) + (indices.OrderBy(o => o.Key).Last().Value.ToString()));
                 }
-
-                Console.WriteLine(total);
             }
             
             return total;
@@ -118,13 +108,13 @@ namespace AdventOfCode2023.Days
 
 
 
-        private static int? GetIndexOfNumberWord(string textToCheck, string word)
+        private static int? GetIndexOfNumberWord(string textToCheck, string word, bool getFirstIndex = true)
         {
             int? index = null;
 
             if (textToCheck.ToLower().Contains(word))
             {
-                index = textToCheck.ToLower().IndexOf(word);
+                index = getFirstIndex ? textToCheck.ToLower().IndexOf(word) : textToCheck.ToLower().LastIndexOf(word);
             }
 
             return index;
