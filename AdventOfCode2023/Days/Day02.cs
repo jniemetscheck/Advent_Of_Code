@@ -17,12 +17,13 @@ namespace AdventOfCode2023.Days
             return GetPossibleGameCount(games, 12, 13, 14);
         }
 
-        //public static int GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var games = GetMappedGames(lines.ToList());
 
-        //    return GetSumOfCalibrationNumbersAndStrings(lines.ToList());
-        //}
+            return GetMinimumCubePowerSum(games);
+        }
 
         public static List<Game> GetMappedGames(List<string> input)
         {
@@ -107,12 +108,59 @@ namespace AdventOfCode2023.Days
 
             return result;
         }
+
+        public static double GetMinimumCubePowerSum(List<Game> games)
+        {
+            var result = 0d;
+
+            foreach (var game in games)
+            {
+                var minimumRedCount = 0;
+                var minimumGreenCount = 0;
+                var minimumBlueCount = 0;
+
+                foreach (var set in game.Sets)
+                {
+                    foreach (var combination in set.Combinations)
+                    {
+                        switch (combination.Color)
+                        {
+                            case BlockColor.Red:
+                                if (minimumRedCount <= combination.Count)
+                                {
+                                    minimumRedCount = combination.Count;
+                                }
+                                break;
+                            case BlockColor.Green:
+                                if (minimumGreenCount <= combination.Count)
+                                {
+                                    minimumGreenCount = combination.Count;
+                                }
+                                break;
+                            case BlockColor.Blue:
+                                if (minimumBlueCount <= combination.Count)
+                                {
+                                    minimumBlueCount = combination.Count;
+                                }
+                                break;
+                        }
+                    }
+                }
+
+                game.Power = minimumRedCount * minimumGreenCount * minimumBlueCount;
+            }
+
+
+
+            return games.Sum(s => s.Power);
+        }
     }
 
     public class Game
     {
         public int Id { get; set; }
         public List<Set> Sets { get; set; }
+        public double Power { get; set; }
     }
 
     public class Set
