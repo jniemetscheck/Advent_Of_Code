@@ -111,8 +111,6 @@ namespace AdventOfCode2023.Days
 
         public static double GetMinimumCubePowerSum(List<Game> games)
         {
-            var result = 0d;
-
             foreach (var game in games)
             {
                 var minimumRedCount = 0;
@@ -149,8 +147,6 @@ namespace AdventOfCode2023.Days
 
                 game.Power = minimumRedCount * minimumGreenCount * minimumBlueCount;
             }
-
-
 
             return games.Sum(s => s.Power);
         }
