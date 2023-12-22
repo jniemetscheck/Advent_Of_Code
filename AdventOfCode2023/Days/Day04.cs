@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace AdventOfCode2023.Days
 {
@@ -17,13 +18,13 @@ namespace AdventOfCode2023.Days
             return GetWinnings(cards);
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
-        //    var engine = GetMappedEngine(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var cards = GetMappedCards(lines.ToList());
 
-        //    return GetGearRatioSum(engine);
-        //}
+            return GetWinningsModified(cards);
+        }
 
         public static List<Card> GetMappedCards(List<string> input)
         {
@@ -32,7 +33,7 @@ namespace AdventOfCode2023.Days
 
             foreach (var line in normalizedInput)
             {
-                var card = new Card { WinningNumbers = new List<int>(), DrawnNumbers = new List<int>() };
+                var card = new Card { WinningNumbers = new List<int>(), DrawnNumbers = new List<int>(), Copies = new List<Card>() };
 
                 var cardSplit = line.Split(':');
                 var numbersSplit = cardSplit[1].Split('|');
@@ -104,11 +105,73 @@ namespace AdventOfCode2023.Days
 
             return result;
         }
+
+        public static double GetWinningsModified(List<Card> cards)
+        {
+            var result = 0d;
+
+            for (var i = 0; i < cards.Count; i++)
+            {
+                var count = GetWinningCount(i, cards);
+
+                for (var j = i + 1; j <= i + count; j++)
+                {
+                    if (j < cards.Count)
+                    {
+                        cards[i].Copies.Add(cards[j]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            foreach (var card in cards)
+            {
+                result += GetWinCount(card.Copies);
+            }
+
+            return result;
+        }
+
+        public static int GetWinCount(List<Card> copies)
+        {
+            var result = 0;
+
+            foreach (var copy in copies)
+            {
+                result += GetWinCount(copy.Copies);
+            }
+
+            result++;
+
+            return result;
+        }
+
+        public static int GetWinningCount(int index, List<Card> cards)
+        {
+            var winningNumberCount = 0;
+
+            foreach (var winningNumber in cards[index].WinningNumbers)
+            {
+                foreach (var drawnNumber in cards[index].DrawnNumbers)
+                {
+                    if (winningNumber == drawnNumber)
+                    {
+                        winningNumberCount++;
+                    }
+                }
+            }
+
+            return winningNumberCount;
+        }
     }
 
     public class Card
     {
         public List<int> WinningNumbers { get; set; }
         public List<int> DrawnNumbers { get; set; }
+        public List<Card> Copies { get; set; }
     }
 }
