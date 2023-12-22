@@ -17,13 +17,13 @@ namespace AdventOfCode2023.Days
             return GetMissingEnginePart(engine);
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
-        //    var games = GetMappedGames(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var engine = GetMappedEngine(lines.ToList());
 
-        //    return GetMinimumCubePowerSum(games);
-        //}
+            return GetGearRatioSum(engine);
+        }
 
         public static Engine GetMappedEngine(List<string> input)
         {
@@ -74,7 +74,7 @@ namespace AdventOfCode2023.Days
                     else
                     {
                         //special character
-                        engine.SpecialParts.Add(new SpecialPart { X = i, Y = j });
+                        engine.SpecialParts.Add(new SpecialPart { X = i, Y = j, IsPossibleGear = input[j][i] == '*' });
 
                         if (currentNumber.Length > 0)
                         {
@@ -124,6 +124,35 @@ namespace AdventOfCode2023.Days
 
             return result;
         }
+
+        public static double GetGearRatioSum(Engine engine)
+        {
+            var result = 0d;
+
+            foreach (var specialPart in engine.SpecialParts.Where(p => p.IsPossibleGear))
+            {
+                var adjacentParts = new List<int>();
+
+                foreach (var regularPart in engine.RegularParts)
+                {
+                    if (regularPart.Y == specialPart.Y || regularPart.Y == specialPart.Y - 1 || regularPart.Y == specialPart.Y + 1)
+                    {
+                        //we have a possible correct Y part, check X
+                        if (specialPart.X >= regularPart.StartX - 1 && specialPart.X <= regularPart.EndX + 1)
+                        {
+                            adjacentParts.Add(regularPart.Number);
+                        }
+                    }
+                }
+
+                if (adjacentParts.Count == 2)
+                {
+                    result += adjacentParts[0] * adjacentParts[1];
+                }
+            }
+
+            return result;
+        }
     }
 
     public class Engine
@@ -144,5 +173,6 @@ namespace AdventOfCode2023.Days
     {
         public int X { get; set; }
         public int Y { get; set; }
+        public bool IsPossibleGear { get; set; }
     }
 }
