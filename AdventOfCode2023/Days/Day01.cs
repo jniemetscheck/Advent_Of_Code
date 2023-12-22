@@ -104,8 +104,6 @@ namespace AdventOfCode2023.Days
             return total;
         }
 
-
-
         private static int? GetIndexOfNumberWord(string textToCheck, string word, bool getFirstIndex = true)
         {
             int? index = null;
