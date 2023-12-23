@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 
 namespace AdventOfCode2023.Days
@@ -14,8 +13,7 @@ namespace AdventOfCode2023.Days
             var lines = File.ReadAllLines(FilePath);
             var garden = GetMappedGarden(lines.ToList());
 
-            //return GetWinnings(cards);
-            return 0;
+            return GetClosestSeedLocation(garden);
         }
 
         //public static double GetResultPartTwo()
@@ -28,7 +26,7 @@ namespace AdventOfCode2023.Days
 
         public static Garden GetMappedGarden(List<string> lines)
         {
-            var garden = new Garden { InitialSeeds = new List<int>(), LocationMaps = new List<LocationMap>() };
+            var garden = new Garden { InitialSeeds = new List<double>(), LocationMaps = new List<LocationMap>() };
 
             var currentSortOrder = 1;
 
@@ -43,7 +41,7 @@ namespace AdventOfCode2023.Days
 
                     foreach (var seed in seedsSplit)
                     {
-                        garden.InitialSeeds.Add(int.Parse(seed));
+                        garden.InitialSeeds.Add(double.Parse(seed));
                     }
                 }
                 else
@@ -67,7 +65,7 @@ namespace AdventOfCode2023.Days
                             {
                                 var rangeSplit = lines[i].Split(' ');
 
-                                currentLocationMap.Maps.Add(new Map { DestinationRangeStart = int.Parse(rangeSplit[0]), SourceRangeStart = int.Parse(rangeSplit[1]), Range = int.Parse(rangeSplit[2]) });
+                                currentLocationMap.Maps.Add(new Map { DestinationRangeStart = double.Parse(rangeSplit[0]), SourceRangeStart = double.Parse(rangeSplit[1]), Range = int.Parse(rangeSplit[2]) });
                             }
                         }
                     }
@@ -76,11 +74,54 @@ namespace AdventOfCode2023.Days
 
             return garden;
         }
+
+        public static double GetClosestSeedLocation(Garden garden)
+        {
+            var seedLocations = new List<double>();
+
+            foreach (var seed in garden.InitialSeeds)
+            {
+                var nextSource = seed;
+
+                foreach (var locationMap in garden.LocationMaps.OrderBy(o => o.SortOrder))
+                {
+                    nextSource = GetSeedLocation(nextSource, locationMap);
+                }
+
+                seedLocations.Add(nextSource);
+            }
+
+            return seedLocations.OrderBy(o => o).FirstOrDefault();
+        }
+
+        public static double GetSeedLocation(double source, LocationMap map)
+        {
+            var result = source;
+
+            foreach (var currentMap in map.Maps)
+            {
+                if (result >= currentMap.SourceRangeStart && result < currentMap.SourceRangeStart + currentMap.Range)
+                {
+                    if (currentMap.DestinationRangeStart > currentMap.SourceRangeStart)
+                    {
+                        result += currentMap.DestinationRangeStart - currentMap.SourceRangeStart;
+                    }
+                    else
+                    {
+                        result -= currentMap.SourceRangeStart - currentMap.DestinationRangeStart;
+                    }
+
+                    break;
+                }
+            }
+
+            return result;
+        }
     }
 
     public class Garden
     {
-        public List<int> InitialSeeds { get; set; }
+        public List<double> InitialSeeds { get; set; }
         public List<LocationMap> LocationMaps { get; set; }
     }
 
@@ -92,8 +133,8 @@ namespace AdventOfCode2023.Days
 
     public class Map
     {
-        public int DestinationRangeStart { get; set; }
-        public int SourceRangeStart { get; set; }
-        public int Range { get; set; }
+        public double DestinationRangeStart { get; set; }
+        public double SourceRangeStart { get; set; }
+        public double Range { get; set; }
     }
 }
