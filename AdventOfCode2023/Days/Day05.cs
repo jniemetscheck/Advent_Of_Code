@@ -16,17 +16,17 @@ namespace AdventOfCode2023.Days
             return GetClosestSeedLocation(garden);
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
-        //    var cards = GetMappedCards(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var garden = GetMappedGarden(lines.ToList());
 
-        //    return GetWinningsModified(cards);
-        //}
+            return GetClosestSeedLocation(garden);
+        }
 
         public static Garden GetMappedGarden(List<string> lines)
         {
-            var garden = new Garden { InitialSeeds = new List<double>(), LocationMaps = new List<LocationMap>() };
+            var garden = new Garden { InitialSeeds = new List<double>(), InitialSeedRanges = new Dictionary<double, double>(), LocationMaps = new List<LocationMap>() };
 
             var currentSortOrder = 1;
 
@@ -42,6 +42,13 @@ namespace AdventOfCode2023.Days
                     foreach (var seed in seedsSplit)
                     {
                         garden.InitialSeeds.Add(double.Parse(seed));
+                    }
+
+                    var index = 0;
+                    while (index < seedsSplit.Length - 1)
+                    {
+                        garden.InitialSeedRanges.Add(double.Parse(seedsSplit[index]), double.Parse(seedsSplit[index + 1]));
+                        index = index + 2;
                     }
                 }
                 else
@@ -77,21 +84,64 @@ namespace AdventOfCode2023.Days
 
         public static double GetClosestSeedLocation(Garden garden)
         {
-            var seedLocations = new List<double>();
+            double lowestLocation = 0d;
+            var hasLowestBeenSet = false;
 
-            foreach (var seed in garden.InitialSeeds)
+            if (garden.InitialSeedRanges.Any())
             {
-                var nextSource = seed;
-
-                foreach (var locationMap in garden.LocationMaps.OrderBy(o => o.SortOrder))
+                foreach (var range in garden.InitialSeedRanges)
                 {
-                    nextSource = GetSeedLocation(nextSource, locationMap);
-                }
+                    for (var i = 0; i < range.Value; i++)
+                    {
+                        var nextSource = range.Key + i;
 
-                seedLocations.Add(nextSource);
+                        foreach (var locationMap in garden.LocationMaps.OrderBy(o => o.SortOrder))
+                        {
+                            nextSource = GetSeedLocation(nextSource, locationMap);
+                        }
+
+                        if (!hasLowestBeenSet)
+                        {
+                            lowestLocation = nextSource;
+                            hasLowestBeenSet = true;
+                        }
+                        else
+                        {
+                            if (lowestLocation > nextSource)
+                            {
+                                lowestLocation = nextSource;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var seed in garden.InitialSeeds)
+                {
+                    var nextSource = seed;
+
+                    foreach (var locationMap in garden.LocationMaps.OrderBy(o => o.SortOrder))
+                    {
+                        nextSource = GetSeedLocation(nextSource, locationMap);
+                    }
+
+                    if (!hasLowestBeenSet)
+                    {
+                        lowestLocation = nextSource;
+                        hasLowestBeenSet = true;
+                    }
+                    else
+                    {
+                        if (lowestLocation > nextSource)
+                        {
+                            lowestLocation = nextSource;
+                        }
+                    }
+                }
             }
 
-            return seedLocations.OrderBy(o => o).FirstOrDefault();
+            return lowestLocation;
         }
 
         public static double GetSeedLocation(double source, LocationMap map)
@@ -121,6 +171,7 @@ namespace AdventOfCode2023.Days
 
     public class Garden
     {
+        public Dictionary<double, double> InitialSeedRanges { get; set; }
         public List<double> InitialSeeds { get; set; }
         public List<LocationMap> LocationMaps { get; set; }
     }
