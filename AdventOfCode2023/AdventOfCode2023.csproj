@@ -43,12 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Day02\Classes.cs" />
+    <Compile Include="Classes\Day03\Classes.cs" />
+    <Compile Include="Classes\Day04\Classes.cs" />
+    <Compile Include="Classes\Day05\Classes.cs" />
+    <Compile Include="Classes\Day06\Classes.cs" />
+    <Compile Include="Classes\Day07\Classes.cs" />
     <Compile Include="Days\Day01.cs" />
     <Compile Include="Days\Day02.cs" />
     <Compile Include="Days\Day03.cs" />
     <Compile Include="Days\Day04.cs" />
     <Compile Include="Days\Day05.cs" />
     <Compile Include="Days\Day06.cs" />
+    <Compile Include="Days\Day07.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +79,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Input\Day05.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Input\Day07.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

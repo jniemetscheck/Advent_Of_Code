@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AdventOfCode2023.Classes.Day06;
+using System.Collections.Generic;
 
 namespace AdventOfCode2023.Days
 {
@@ -93,11 +94,5 @@ namespace AdventOfCode2023.Days
 
             return movingTime * speed;
         }
-    }
-
-    public class Race
-    {
-        public double Time { get; set; }
-        public double RecordDistance { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using AdventOfCode2023.Classes.Day03;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 
 namespace AdventOfCode2023.Days
 {
@@ -153,26 +153,5 @@ namespace AdventOfCode2023.Days
 
             return result;
         }
-    }
-
-    public class Engine
-    {
-        public List<RegularPart> RegularParts { get; set; }
-        public List<SpecialPart> SpecialParts { get; set; }
-    }
-
-    public class RegularPart
-    {
-        public int StartX { get; set; }
-        public int EndX { get; set; }
-        public int Y { get; set; }
-        public int Number { get; set; }
-    }
-
-    public class SpecialPart
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public bool IsPossibleGear { get; set; }
     }
 }

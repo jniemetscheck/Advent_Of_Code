@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventOfCode2023.Classes.Day02;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -150,30 +151,5 @@ namespace AdventOfCode2023.Days
 
             return games.Sum(s => s.Power);
         }
-    }
-
-    public class Game
-    {
-        public int Id { get; set; }
-        public List<Set> Sets { get; set; }
-        public double Power { get; set; }
-    }
-
-    public class Set
-    {
-        public List<Combination> Combinations { get; set; }
-    }
-
-    public class Combination
-    {
-        public int Count { get; set; }
-        public BlockColor Color { get; set; }
-    }
-
-    public enum BlockColor
-    {
-        Blue,
-        Green,
-        Red
     }
 }

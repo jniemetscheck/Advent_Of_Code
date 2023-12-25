@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AdventOfCode2023.Classes.Day04;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace AdventOfCode2023.Days
 {
@@ -166,12 +166,5 @@ namespace AdventOfCode2023.Days
 
             return winningNumberCount;
         }
-    }
-
-    public class Card
-    {
-        public List<int> WinningNumbers { get; set; }
-        public List<int> DrawnNumbers { get; set; }
-        public List<Card> Copies { get; set; }
     }
 }
