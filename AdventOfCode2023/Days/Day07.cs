@@ -12,21 +12,20 @@ namespace AdventOfCode2023.Days
         public static double GetResultPartOne()
         {
             var lines = File.ReadAllLines(FilePath);
-            var hands = GetMappedHands(lines.ToList(), false);
+            var hands = GetMappedHands(lines.ToList(), 11);
 
             return GetTotalWinnings(hands);
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //var lines = File.ReadAllLines(FilePath);
-        //var hands = GetMappedHands(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var hands = GetMappedHands(lines.ToList(), 1);
 
-        //    //return GetClosestSeedLocation(garden);
-        //    return 0;
-        //}
+            return GetTotalWinnings(hands);
+        }
 
-        public static List<Hand> GetMappedHands(List<string> lines, bool sortHand)
+        public static List<Hand> GetMappedHands(List<string> lines, int jValue)
         {
             var result = new List<Hand>();
 
@@ -51,7 +50,7 @@ namespace AdventOfCode2023.Days
                             newCard.Value = 12;
                             break;
                         case "j":
-                            newCard.Value = 11;
+                            newCard.Value = jValue;
                             break;
                         case "t":
                             newCard.Value = 10;
@@ -65,11 +64,15 @@ namespace AdventOfCode2023.Days
                 }
 
                 hand.Bid = int.Parse(handBidSplit[1]);
-                hand.Type = GetHandType(hand.Cards);
 
-                if (sortHand)
+                if (jValue == 1)
                 {
-                    hand.Cards = hand.Cards.OrderByDescending(o => o.Value).ToList();
+                    //get best hand using jokers
+                    hand.Type = GetHandTypeWithJokers(hand, jValue);
+                }
+                else
+                {
+                    hand.Type = GetHandType(hand.Cards);
                 }
 
                 result.Add(hand);
@@ -101,6 +104,42 @@ namespace AdventOfCode2023.Days
             return result;
         }
 
+        public static HandType GetHandTypeWithJokers(Hand hand, int jValue)
+        {
+            var dictionary = new Dictionary<int, int>();
+
+            foreach (var card in hand.Cards)
+            {
+                if (card.Value != 1)
+                {
+                    if (dictionary.ContainsKey(card.Value))
+                    {
+                        dictionary[card.Value]++;
+                    }
+                    else
+                    {
+                        dictionary.Add(card.Value, 1);
+                    }
+                }
+            }
+
+            var jCount = hand.Cards.Count(c => c.Value == jValue);
+
+            var highest = dictionary.OrderByDescending(o => o.Value).ThenByDescending(o => o.Key).FirstOrDefault();
+
+            if (highest.Key == 0)
+            {
+                //all Js
+                dictionary.Add(1, jCount);
+            }
+            else
+            {
+                dictionary[highest.Key] += jCount;
+            }
+
+            return GetHandTypeForDictionary(dictionary);
+        }
+
         public static HandType GetHandType(List<Card> cards)
         {
             var dictionary = new Dictionary<int, int>();
@@ -117,6 +156,11 @@ namespace AdventOfCode2023.Days
                 }
             }
 
+            return GetHandTypeForDictionary(dictionary);
+        }
+
+        public static HandType GetHandTypeForDictionary(Dictionary<int, int> dictionary)
+        {
             if (dictionary.ContainsValue(5))
             {
                 return HandType.FiveOfAKind;
