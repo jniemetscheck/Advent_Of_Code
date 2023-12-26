@@ -12,10 +12,9 @@ namespace AdventOfCode2023.Days
         public static double GetResultPartOne()
         {
             var lines = File.ReadAllLines(FilePath);
-            var hands = GetMappedHands(lines.ToList());
+            var hands = GetMappedHands(lines.ToList(), false);
 
-            //return GetClosestSeedLocation(garden);
-            return 0;
+            return GetTotalWinnings(hands);
         }
 
         //public static double GetResultPartTwo()
@@ -27,7 +26,7 @@ namespace AdventOfCode2023.Days
         //    return 0;
         //}
 
-        public static List<Hand> GetMappedHands(List<string> lines)
+        public static List<Hand> GetMappedHands(List<string> lines, bool sortHand)
         {
             var result = new List<Hand>();
 
@@ -66,9 +65,97 @@ namespace AdventOfCode2023.Days
                 }
 
                 hand.Bid = int.Parse(handBidSplit[1]);
+                hand.Type = GetHandType(hand.Cards);
 
-                hand.Cards = hand.Cards.OrderByDescending(o => o.Value).ToList();
+                if (sortHand)
+                {
+                    hand.Cards = hand.Cards.OrderByDescending(o => o.Value).ToList();
+                }
 
+                result.Add(hand);
+            }
+
+            return result;
+        }
+
+        public static double GetTotalWinnings(List<Hand> hands)
+        {
+            var result = 0d;
+            var rankedHands = new List<Hand>();
+
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.HighCard)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.OnePair)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.TwoPair)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.ThreeOfAKind)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.FullHouse)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.FourOfAKind)));
+            rankedHands.AddRange(GetRankedHands(hands.Where(t => t.Type == HandType.FiveOfAKind)));
+
+            var currentMultiplier = 1;
+            foreach (var rankedHand in rankedHands)
+            {
+                result += currentMultiplier * rankedHand.Bid;
+                currentMultiplier++;
+            }
+
+            return result;
+        }
+
+        public static HandType GetHandType(List<Card> cards)
+        {
+            var dictionary = new Dictionary<int, int>();
+
+            foreach (var card in cards)
+            {
+                if (dictionary.ContainsKey(card.Value))
+                {
+                    dictionary[card.Value]++;
+                }
+                else
+                {
+                    dictionary.Add(card.Value, 1);
+                }
+            }
+
+            if (dictionary.ContainsValue(5))
+            {
+                return HandType.FiveOfAKind;
+            }
+
+            if (dictionary.ContainsValue(4))
+            {
+                return HandType.FourOfAKind;
+            }
+
+            if (dictionary.ContainsValue(3) && dictionary.ContainsValue(2))
+            {
+                return HandType.FullHouse;
+            }
+
+            if (dictionary.ContainsValue(3))
+            {
+                return HandType.ThreeOfAKind;
+            }
+
+            if (dictionary.ContainsValue(2) && dictionary.Count(c => c.Value == 2) == 2)
+            {
+                return HandType.TwoPair;
+            }
+
+            if (dictionary.ContainsValue(2) && dictionary.Count(c => c.Value == 2) == 1)
+            {
+                return HandType.OnePair;
+            }
+
+            return HandType.HighCard;
+        }
+
+        public static List<Hand> GetRankedHands(IEnumerable<Hand> hands)
+        {
+            var result = new List<Hand>();
+
+            foreach (var hand in hands.OrderBy(o => o.Cards[0].Value).ThenBy(o => o.Cards[1].Value).ThenBy(o => o.Cards[2].Value).ThenBy(o => o.Cards[3].Value).ThenBy(o => o.Cards[4].Value))
+            {
                 result.Add(hand);
             }
 
