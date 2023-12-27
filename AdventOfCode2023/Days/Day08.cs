@@ -1,10 +1,8 @@
-﻿using System;
-using AdventOfCode2023.Classes.Day05;
-using AdventOfCode2023.Classes.Day08;
+﻿using AdventOfCode2023.Classes.Day08;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Map = AdventOfCode2023.Classes.Day08.Map;
 
 namespace AdventOfCode2023.Days
 {
@@ -20,13 +18,13 @@ namespace AdventOfCode2023.Days
             return GetNumberOfSteps(map, "AAA", "ZZZ");
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
-        //    var map = GetMappedMap(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var map = GetMappedMap(lines.ToList());
 
-        //    return 0;
-        //}
+            return GetNumberOfGhostSteps(map);
+        }
 
         public static Map GetMappedMap(List<string> lines)
         {
@@ -97,6 +95,73 @@ namespace AdventOfCode2023.Days
             return result;
         }
 
+        public static double GetNumberOfGhostSteps(Map map)
+        {
+            var startPositions = new List<int>();
+            var lcmInput = new List<long>();
+
+            for (var i = 0; i < map.MapItems.Count; i++)
+            {
+                if (map.MapItems[i].Origin.ToLower().EndsWith("a"))
+                {
+                    startPositions.Add(i);
+                }
+            }
+
+            foreach (var startPosition in startPositions)
+            {
+                var processing = true;
+                var currentPosition = startPosition;
+                while (processing)
+                {
+                    var processResult = ProcessInstructions(map, "z", currentPosition);
+
+                    processing = !processResult.ReachedDestination;
+                    currentPosition = processResult.CurrentPosition;
+
+                    if (!processing)
+                    {
+                        lcmInput.Add((long)processResult.NumberOfSteps);
+                    }
+                }
+            }
+
+
+            return LCM(lcmInput.ToArray());
+        }
+
+        static long LCM(long[] numbers)
+        {
+            return numbers.Aggregate(lcm);
+        }
+        static long lcm(long a, long b)
+        {
+            return Math.Abs(a * b) / GCD(a, b);
+        }
+        static long GCD(long a, long b)
+        {
+            return b == 0 ? a : GCD(b, a % b);
+        }
+
+        public static (MapItem MapItem, int Position) GetMapItem(List<MapItem> mapItems, int position, string coordinateDirection)
+        {
+            var mapItem = mapItems[position];
+            var nextItemIndex = 0;
+
+            var lookFor = coordinateDirection.ToLower() == "l" ? mapItem.LeftDestination.ToLower() : mapItem.RightDestination.ToLower();
+
+            for (var i = 0; i < mapItems.Count; i++)
+            {
+                if (mapItems[i].Origin.ToLower() == lookFor)
+                {
+                    nextItemIndex = i;
+                    break;
+                }
+            }
+
+            return (mapItems[nextItemIndex], nextItemIndex);
+        }
+
         public static (bool ReachedDestination, double NumberOfSteps, int CurrentPosition) ProcessInstructions(Map map, string lookingFor, int currentPosition)
         {
             var found = false;
@@ -115,7 +180,7 @@ namespace AdventOfCode2023.Days
 
                 var newLookingFor = map.MovementInstructions[i].ToLower() == "l" ? thisElement.LeftDestination : thisElement.RightDestination;
 
-                if (newLookingFor.ToLower() == lookingFor.ToLower())
+                if (newLookingFor.ToLower().EndsWith(lookingFor.ToLower()))
                 {
                     found = true;
                     stepCount++;
@@ -124,7 +189,7 @@ namespace AdventOfCode2023.Days
 
                 for (var j = 0; j < map.MapItems.Count; j++)
                 {
-                    if (newLookingFor.ToLower() == map.MapItems[j].Origin.ToLower())
+                    if (newLookingFor.ToLower().EndsWith(map.MapItems[j].Origin.ToLower()))
                     {
                         lastPosition = j;
                         Console.WriteLine(lastPosition);
