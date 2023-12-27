@@ -98,7 +98,7 @@ namespace AdventOfCode2023.Days
         public static double GetNumberOfGhostSteps(Map map)
         {
             var startPositions = new List<int>();
-            var lcmInput = new List<long>();
+            //var lcmInput = new List<long>();
 
             for (var i = 0; i < map.MapItems.Count; i++)
             {
@@ -108,32 +108,31 @@ namespace AdventOfCode2023.Days
                 }
             }
 
-            foreach (var startPosition in startPositions)
+            var result = 1d;
+            var processing = true;
+            var currentPosition = startPositions[0];
+            while (processing)
             {
-                var processing = true;
-                var currentPosition = startPosition;
-                while (processing)
-                {
-                    var processResult = ProcessInstructions(map, "z", currentPosition);
+                var processResult = ProcessInstructions(map, "z", currentPosition);
 
-                    processing = !processResult.ReachedDestination;
-                    currentPosition = processResult.CurrentPosition;
+                processing = !processResult.ReachedDestination;
+                currentPosition = processResult.CurrentPosition;
+                result += processResult.NumberOfSteps;
 
-                    if (!processing)
-                    {
-                        lcmInput.Add((long)processResult.NumberOfSteps);
-                    }
-                }
+                //if (!processing)
+                //{
+                //    lcmInput.Add((long)processResult.NumberOfSteps);
+                //}
             }
 
 
-            return LCM(lcmInput.ToArray());
+            return lcm(startPositions.Count, (long)result);
         }
 
-        static long LCM(long[] numbers)
-        {
-            return numbers.Aggregate(lcm);
-        }
+        //static long LCM(long[] numbers)
+        //{
+        //    return numbers.Aggregate(lcm);
+        //}
         static long lcm(long a, long b)
         {
             return Math.Abs(a * b) / GCD(a, b);
