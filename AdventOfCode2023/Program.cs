@@ -28,7 +28,10 @@ namespace AdventOfCode2023
             //Console.WriteLine($"Result for Day 07 Part 2: {Days.Day07.GetResultPartTwo()}");
 
             //Console.WriteLine($"Result for Day 08 Part 1: {Days.Day08.GetResultPartOne()}");
-            Console.WriteLine($"Result for Day 08 Part 2: {Days.Day08.GetResultPartTwo()}");
+            //Console.WriteLine($"Result for Day 08 Part 2: {Days.Day08.GetResultPartTwo()}");
+
+            Console.WriteLine($"Result for Day 09 Part 1: {Days.Day09.GetResultPartOne()}");
+            //Console.WriteLine($"Result for Day 09 Part 2: {Days.Day09.GetResultPartTwo()}");
 
             Console.ReadLine();
         }
