@@ -18,13 +18,13 @@ namespace AdventOfCode2023.Days
             return GetNextValueNumberSum(historyLines.ToList());
         }
 
-        //public static double GetResultPartTwo()
-        //{
-        //    var lines = File.ReadAllLines(FilePath);
-        //    var map = GetMappedMap(lines.ToList());
+        public static double GetResultPartTwo()
+        {
+            var lines = File.ReadAllLines(FilePath);
+            var historyLines = GetMappedInput(lines.ToList());
 
-        //    return GetNumberOfGhostSteps(map);
-        //}
+            return GetNextValueNumberSumReverse(historyLines.ToList());
+        }
 
         private static IEnumerable<HistoryItem> GetMappedInput(List<string> lines)
         {
@@ -74,6 +74,44 @@ namespace AdventOfCode2023.Days
                 for (var i = finalList.Count - 2; i >= 0; i--)
                 {
                     missingNumber = incremeter + finalList[i].LastOrDefault();
+                    incremeter = missingNumber;
+                }
+
+                result += missingNumber;
+            }
+
+            return result;
+        }
+
+        private static double GetNextValueNumberSumReverse(List<HistoryItem> historyItems)
+        {
+            var result = 0d;
+
+            foreach (var historyItem in historyItems)
+            {
+                var done = false;
+                var finalList = new List<List<double>>();
+                var next = historyItem.Numbers;
+                finalList.Add(next);
+                while (!done)
+                {
+                    next = GetNextDifferenceLine(next);
+
+                    if (next.TrueForAll(m => m == 0))
+                    {
+                        done = true;
+                    }
+                    else
+                    {
+                        finalList.Add(next);
+                    }
+                }
+
+                var missingNumber = 0d;
+                var incremeter = finalList.LastOrDefault().FirstOrDefault();
+                for (var i = finalList.Count - 2; i >= 0; i--)
+                {
+                    missingNumber = finalList[i].FirstOrDefault() - incremeter;
                     incremeter = missingNumber;
                 }
 
