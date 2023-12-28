@@ -51,6 +51,7 @@
     <Compile Include="Classes\Day07\Classes.cs" />
     <Compile Include="Classes\Day08\Classes.cs" />
     <Compile Include="Classes\Day09\Classes.cs" />
+    <Compile Include="Classes\Day10\Classes.cs" />
     <Compile Include="Days\Day01.cs" />
     <Compile Include="Days\Day02.cs" />
     <Compile Include="Days\Day03.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Days\Day07.cs" />
     <Compile Include="Days\Day08.cs" />
     <Compile Include="Days\Day09.cs" />
+    <Compile Include="Days\Day10.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -92,6 +94,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Input\Day09.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Input\Day10.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
